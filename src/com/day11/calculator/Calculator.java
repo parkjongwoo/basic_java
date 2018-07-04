@@ -2,6 +2,7 @@ package com.day11.calculator;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +37,13 @@ public class Calculator extends JFrame {
 	private JPanel mainPanel;
 	
 	/**
+	 * 바로 전 입력한 문자.
+	 */
+	private char lastInputChar = ' ';
+	
+	private Font font;
+	
+	/**
 	 * 버튼을 인덱스 값으로 찾기
 	 * @param itemIndex 버튼 글자의 인덱스 값.controlMenuTitle의 순번과 동일.
 	 * @return JButton 객체. 글자 입력 버튼.
@@ -59,8 +67,8 @@ public class Calculator extends JFrame {
 	private JPanel buildMain() {
 		JPanel p = new JPanel(new BorderLayout());
 		inputField = new JTextField();
-		inputField.setPreferredSize(new Dimension(300, 150));
-		
+		inputField.setPreferredSize(new Dimension(300, 50));
+		inputField.setFont(font);
 		p.add(inputField, BorderLayout.NORTH);//입력창 추가
 		p.add(buildControlMenu(), BorderLayout.SOUTH);//입력버튼 모음 추가
 		return p;
@@ -72,10 +80,11 @@ public class Calculator extends JFrame {
 	 */
 	private JPanel buildControlMenu() {
 		JPanel p = new JPanel(new GridLayout(5,3));
-		p.setPreferredSize(new Dimension(300, 400));
+		p.setPreferredSize(new Dimension(300, 350));
 		JButton b;
 		for (int i = 0; i < controlMenuTitle.length; i++) {// 버튼 글자수만큼 반복
 			b = new JButton(controlMenuTitle[i]);//버튼생성
+			b.setFont(font);
 			b.setMnemonic((i + 1));
 			controlMenuButtonMap.put(controlMenuTitle[i], b);//차후 참조위해 매핑
 			p.add(b);
@@ -112,7 +121,7 @@ public class Calculator extends JFrame {
 	private String calculatePostfix(LinkedList<String> postfix) {
 		Stack<String> opStack = new Stack<String>();
 		String item;
-		while(!postfix.isEmpty()) {// 후위 연산식이 남아있으면
+		while(!postfix.isEmpty()) {// 후위 연산식이 남아있으면 반복
 			item = postfix.removeFirst();//첫 항 가져오기
 			if(isDouble(item)) {//숫자라면
 				opStack.push(item);//스택에 저장
@@ -167,6 +176,8 @@ public class Calculator extends JFrame {
 			thisChar = s.charAt(i);//이번 작업할 문자
 			if(thisChar>='0' && thisChar<='9') {//숫자면
 				sb.append(s.charAt(i));			//숫자생성에 추가
+			}else if(thisChar == '.'){//소숫점도 숫자
+				sb.append(s.charAt(i));
 			}else {//연산자라면
 				postfix.add(sb.toString());//숫자 항이 완성되었으므로 결과 큐에 저장
 				sb.setLength(0);//숫자생성 리셋
@@ -239,10 +250,10 @@ public class Calculator extends JFrame {
 	        if (c < '0' || c > '9' ) {//숫자값이 아닌 글자라면
 	        	if(c != '.') {//점.이 아니면 숫자 아님
 	        		return false;
-	        	}else {// 글자중 점이 오면
+	        	}else {// 점이면
 	        		if(pointCnt==0) {//첫 점은 무시
 	        			pointCnt++;
-	        		}else {
+	        		}else {//두번째 점이 있으면 숫자가 아닌 것으로 판단
 	        			return false;
 	        		}	        		
 	        	}	        	
@@ -256,28 +267,40 @@ public class Calculator extends JFrame {
 	 * 레이아웃추가
 	 */
 	public void addLayout() {
+		font = new Font("바른 고딕", Font.PLAIN, 20);
 		mainPanel = buildMain();
 
 		add(mainPanel);
-		setSize(300, 600);
+		setSize(300, 450);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	/**
-	 * =로 결과확인 및 입력창 초기화.
+	 * 버튼에 마우스 이벤트 연결
 	 */
 	public void addEvent() {
 		for(int i=0;i<controlMenuTitle.length;i++) {
-			getButtonFromeControlMenuByIndex(i).addActionListener(new ActionListener() {
+			getButtonFromeControlMenuByIndex(i).addActionListener(new ActionListener() {//버튼 별로 이벤트 등록
 				@Override
-				public void actionPerformed(ActionEvent e) {					
+				public void actionPerformed(ActionEvent e) {				
+					
 					String expression = inputField.getText();//입력창에 있는 문자열 전체
+					JButton jb = (JButton)e.getSource();
+					String inputString = jb.getText();//입력한 문자  String 객체
+					char inputChar = inputString.charAt(0);//입력한 문자 char 형
+					if( lastInputChar == ' ') {//첫 입력이면
+						if(inputChar < '0' || inputChar > '9') //첫 입력이 숫자가 아니면 입력 거부
+							return;						
+					}else {//첫 입력이 아닌 경우
+						if( (lastInputChar < '0' || lastInputChar > '9') && //이전 문자와 이번 입력문자가 둘다 숫자가 아니면 입력 거부
+								(inputChar < '0' || inputChar > '9') ) 
+							return;						
+					}
+					lastInputChar = inputChar;//입력 문자 기록
 					if(expression.indexOf('=')>=0) {//입력창에 =이 있다면 이미 계산 완료 
 						inputField.setText("");//입력 초기화
 					}
-					JButton jb = (JButton)e.getSource();
-					String inputString = jb.getText();
 					if(inputString.equals("=")) {//=키 누른경우
 						String result = calculate(expression);//결과값 산정
 						addText(inputField, "=");//textField에 =추가
