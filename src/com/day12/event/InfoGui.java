@@ -1,9 +1,17 @@
-package com.day10.ui.copy;
+package com.day12.event;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,11 +50,10 @@ public class InfoGui extends JFrame {
 	private JTextArea ta;
 	private JPanel mainPanel;
 	
-	/**
-	 * 스윙 라이브러리로 만드는 입력폼.
-	 * 주민번호에 맞춰 성별,지역,나이 등을 자동 입력 까지 진행
-	 */
+	private ArrayList<InfoVO> voList;
+	
 	public InfoGui() {
+		voList = new ArrayList<InfoVO>();
 	}
 
 	private JMenuItem getMenuItemFromTopMenuByIndex(int menuIndex, int itemIndex) {
@@ -76,6 +83,7 @@ public class InfoGui extends JFrame {
 	private JPanel buildMain() {
 		JPanel p = new JPanel(new BorderLayout());
 		ta = new JTextArea();
+		ta.setPreferredSize(new Dimension(300, 250));
 		JScrollPane sp = new JScrollPane(ta);
 		ta.setLineWrap(true);
 		p.add(sp, BorderLayout.EAST);
@@ -212,15 +220,48 @@ public class InfoGui extends JFrame {
 		}
 		return result;
 	}
+	
+	private void insert() {	
+		voList.add(new InfoVO(
+				getTextFieldFromeInputTableByIndex(0).getText(),
+				getTextFieldFromeInputTableByIndex(1).getText(),
+				getTextFieldFromeInputTableByIndex(2).getText(),
+				getTextFieldFromeInputTableByIndex(3).getText(),
+				getTextFieldFromeInputTableByIndex(4).getText(),
+				getTextFieldFromeInputTableByIndex(5).getText()));
+	}
 
+	private void clearTextField() {
+		for(int i=0;i<inputTableTitle.length;i++) {
+			getTextFieldFromeInputTableByIndex(i).setText(null);
+		}		
+	}
+	
+	private void showInfo(InfoVO i) {
+		getTextFieldFromeInputTableByIndex(0).setText(i.getName());
+		getTextFieldFromeInputTableByIndex(1).setText(i.getPhoneNum());
+		getTextFieldFromeInputTableByIndex(2).setText(i.getpID());
+		getTextFieldFromeInputTableByIndex(3).setText(i.getZender());
+		getTextFieldFromeInputTableByIndex(4).setText(i.getAge());
+		getTextFieldFromeInputTableByIndex(5).setText(i.getHome());
+	}
+	
+	private void selectAll() {
+		StringBuffer sb = new StringBuffer();
+		for(int i=0;i<voList.size();i++) {
+			sb.append(voList.get(i).toString());
+		}
+		ta.setText(sb.toString());
+	}
+	
 	public void addLayout() {
 		mainPanel = buildMain();
 
 		add(mainPanel);
 		setJMenuBar(buildMenuBar());
 		setSize(600, 300);
-		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);		
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
 
 	public void addEvent() {
@@ -228,34 +269,28 @@ public class InfoGui extends JFrame {
 		getButtonFromeControlMenuByTitle("입력").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "입력");
-			}
+				insert();
+				clearTextField();
+			}			
 		});
-		getButtonFromeControlMenuByIndex(1).addActionListener(new ActionListener() {
+		getButtonFromeControlMenuByTitle("수정").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "수정");
+				
 			}
 		});
-		getButtonFromeControlMenuByIndex(2).addActionListener(new ActionListener() {
+		getButtonFromeControlMenuByTitle("삭제").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "삭제");
+				
 			}
 		});
-		getButtonFromeControlMenuByIndex(3).addActionListener(new ActionListener() {
+		getButtonFromeControlMenuByTitle("전체보기").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "전체보기");
-			}
+				selectAll();
+			}		
 		});
-		getButtonFromeControlMenuByIndex(4).addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "종료");
-			}
-		});
-
 		// 입력창 텍스트 입력 리스너
 		getTextFieldFromeInputTableByIndex(2).addActionListener(new ActionListener() {
 			@Override
@@ -268,6 +303,47 @@ public class InfoGui extends JFrame {
 					getTextFieldFromeInputTableByTitle("출신지").setText(getDistrictFromJumin(t));
 				}
 			}
+		});
+		getTextFieldFromeInputTableByTitle("전화번호").addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JTextField tf = (JTextField) e.getSource();
+				String t = tf.getText().trim();
+				for(InfoVO i:voList) {
+					if(i.getPhoneNum().equals(t)) {
+						showInfo(i);
+						break;
+					}
+				}
+			}		
+		});
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowClosing(e);
+				if(JOptionPane.showConfirmDialog(null, "정말 나가나?","종료",JOptionPane.YES_NO_OPTION)==JOptionPane.OK_OPTION) {
+					dispose();
+				}
+			}
+		});
+		getTextFieldFromeInputTableByTitle("전화번호").addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+//				JOptionPane.showMessageDialog(null, "전화번호는 10자 이상 입력하세요.");
+			}
+		});
+		getButtonFromeControlMenuByTitle("종료").addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseClicked(e);
+				if(JOptionPane.showConfirmDialog(null, "정말 나가나?","종료",JOptionPane.YES_NO_OPTION)==JOptionPane.OK_OPTION) {
+					dispose();
+				}
+			}			
 		});
 	}
 }

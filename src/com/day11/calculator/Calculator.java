@@ -289,7 +289,7 @@ public class Calculator extends JFrame {
 					JButton jb = (JButton)e.getSource();
 					String inputString = jb.getText();//입력한 문자  String 객체
 					char inputChar = inputString.charAt(0);//입력한 문자 char 형
-					if( lastInputChar == ' ') {//첫 입력이면
+					if( expression.length()==0) {//첫 입력이면
 						if(inputChar < '0' || inputChar > '9') //첫 입력이 숫자가 아니면 입력 거부
 							return;						
 					}else {//첫 입력이 아닌 경우
