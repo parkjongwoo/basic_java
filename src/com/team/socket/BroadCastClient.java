@@ -14,6 +14,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -26,7 +27,11 @@ public class BroadCastClient implements Runnable,ActionListener {
 	int tcpPORT = 5000;
 	int udpPORT = 3001;
 	JFrame f;
-
+	
+	JFileChooser fc;
+	JTextField fileUrlTF;
+	JButton sendMp3B;
+	
 	JTextField connTF, sendTF;
 	JButton connB, sendB;
 	JTextArea ta;
@@ -47,13 +52,21 @@ public class BroadCastClient implements Runnable,ActionListener {
 	public BroadCastClient() {
 		f = new JFrame("Chat Client");
 		
-
+		fc = new JFileChooser("d:\\");
+		fc.showOpenDialog(null);
+		fileUrlTF = new JTextField(fc.getSelectedFile().getAbsolutePath());
+		sendMp3B = new JButton("전송시작");
+		
 		connTF = new JTextField();
 		sendTF = new JTextField();
 		connB = new JButton("접 속");
 		sendB = new JButton("확 인");
 		ta = new JTextArea(15,40);
 		
+		JPanel p_sendMp3 = new JPanel();
+//		p_sendMp3.add(fc);
+		p_sendMp3.add(fileUrlTF);
+		p_sendMp3.add(sendMp3B);
 		// 추가0: 대화명 바꾸기
 		changeNameTF	= new JTextField("guest", 10);
 		changeNameB		= new JButton("바꾸기");
@@ -70,6 +83,7 @@ public class BroadCastClient implements Runnable,ActionListener {
 
 		JPanel p_north = new JPanel();
 		p_north.setLayout( new GridLayout(1, 2));
+		p_north.add( p_sendMp3 );
 		p_north.add( p_changeName );
 		p_north.add( p_serverName );
 
@@ -150,8 +164,16 @@ public class BroadCastClient implements Runnable,ActionListener {
 		else if( o == changeNameTF || o == changeNameB ) {
 			changeNameProc();
 		}
+		
+		else if( o == sendMp3B) {
+			sendMp3();
+		}
 	} // actionPerformed ends
 	
+
+	private void sendMp3() {
+		
+	}
 
 	void changeNameProc(){
 		try{
