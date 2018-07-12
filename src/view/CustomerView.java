@@ -70,16 +70,16 @@ public class CustomerView extends JPanel {
 	
 	private void showDialForSelectingOneFromCusList(ArrayList<Customer> list) {
 		Object[] olist = list.toArray();
-		Object[] possibilities = {"ham", "spam", "yam"};
-		String s = (String)JOptionPane.showInputDialog(
+		Customer dao = (Customer)JOptionPane.showInputDialog(
 		                    this,
 		                    "회원을 선택해주세요.",
-		                    "회원 선택",
+		                    "검색 결과",
 		                    JOptionPane.PLAIN_MESSAGE,
 		                    null,
-		                    possibilities,
-		                    "ham");
-		
+		                    olist,
+		                    olist[0].toString());
+		if(dao!=null)
+			showCusInfo(dao);
 	}
 
 	// 회원가입하는 메소드
@@ -112,10 +112,17 @@ public class CustomerView extends JPanel {
 		// 1. 입력한 전화번호 얻어오기
 		// 2. Model의 전화번호 검색메소드 selectByTel() 호출
 		// 3. 2번의 넘겨받은 Customer의 각각의 값을 화면 텍스트 필드 지정
+		String tel = tfCustTelSearch.getText();
 		try {
-			Customer dao = db.selectByTel(tfCustTelSearch.getText());
-			showCusInfo(dao);
-			JOptionPane.showMessageDialog(null, "검색");
+			mSearchedList = db.selectByTel(tel);
+			JOptionPane.showMessageDialog(null, mSearchedList.size()+"건의 회원정보가 검색되었습니다.");
+			if(mSearchedList.size()>1) {
+				showDialForSelectingOneFromCusList(mSearchedList);
+			}else if(mSearchedList.size() == 1) {
+				showCusInfo(mSearchedList.get(0));
+			}else {
+				JOptionPane.showMessageDialog(null, "["+tel+"]"+ "은 회원목록에 없는 전화번호입니다.");
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("회원입력 실패:" + e.getMessage());

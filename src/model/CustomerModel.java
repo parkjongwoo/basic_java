@@ -39,28 +39,31 @@ public class CustomerModel {
 		ps.setString(4, dao.getCustAddr().trim());
 		ps.setString(5, dao.getCustEmail().trim());
 		
-		ps.executeUpdate();
+		result = ps.executeUpdate();
 		ps.close();
 		return result;
 	}
 	
-	public Customer selectByTel(String tel) throws Exception{
-		Customer dao = new Customer();
-		String sql = "SELECT * FROM v_customer WHERE cpid=?";
+	public ArrayList<Customer> selectByTel(String tel) throws Exception{
+		Customer dao;
+		ArrayList<Customer> list = new ArrayList<Customer>();
+		String sql = "SELECT * FROM v_customer WHERE cpid like ?";
 		PreparedStatement ps = con.prepareStatement(sql);		
-		ps.setString(1, tel);		
+		ps.setString(1, "%"+tel+"%");		
 		
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()) {
+			dao = new Customer();
 			dao.setCustTel1(rs.getString(1));
 			dao.setCustName(rs.getString(2));
 			dao.setCustTel2(rs.getString(3));
 			dao.setCustAddr(rs.getString(4));
 			dao.setCustEmail(rs.getString(5));
+			list.add(dao);
 		}
 		ps.close();
 		
-		return dao;
+		return list;
 		
 	}
 	

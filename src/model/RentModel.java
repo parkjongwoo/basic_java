@@ -6,17 +6,14 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Vector;
 
-
 public class RentModel {
-	
-	
+
 	Connection con;
-	
-	public RentModel() throws Exception{
-		
-		// 1. µå¶óÀÌ¹ö ·Îµù
-		// 2. Connection °´Ã¼ ¾ò¾î¿À±â
+
+	public RentModel() throws Exception {
+
+		// 1. ë“œë¼ì´ë²„ ë¡œë”©
+		// 2. Connection ê°ì²´ ì–»ì–´ì˜¤ê¸°
 	}
-	
-	
+
 }

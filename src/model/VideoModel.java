@@ -9,25 +9,22 @@ import java.util.Vector;
 import model.vo.Video;
 
 public class VideoModel {
-	
-	Connection con;
-	
-	public VideoModel() throws Exception{
-		
-		// 1. µå¶óÀÌ¹ö ·Îµù
-		// 2. Connection °´Ã¼ ¾ò¾î¿À±â
 
-			
+	Connection con;
+
+	public VideoModel() throws Exception {
+
+		// 1. ë“œë¼ì´ë²„ ë¡œë”©
+		// 2. Connection ê°ì²´ ì–»ì–´ì˜¤ê¸°
+
 	}
-	
-	
-	public void insertVideo(Video dao, int count) throws Exception{
-		// 3. sql ¹®Àå ¸¸µé±â
-		// 4. sql Àü¼Û°´Ã¼(PreparedStatement)			
-		// 5. sql Àü¼Û
-		// 6. ´İ±â(PreparedStatement¸¸ ´İ±â)
-		
+
+	public void insertVideo(Video dao, int count) throws Exception {
+		// 3. sql ë¬¸ì¥ ë§Œë“¤ê¸°
+		// 4. sql ì „ì†¡ê°ì²´(PreparedStatement)
+		// 5. sql ì „ì†¡
+		// 6. ë‹«ê¸°(PreparedStatementë§Œ ë‹«ê¸°)
+
 	}
-	
 
 }
