@@ -1,4 +1,4 @@
-package basic;
+package com.util.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +8,7 @@ public class SQLOracleConnector implements SQLConnector {
 	String user;
 	String pw;
 	String url;
-	
+
 	public SQLOracleConnector(String user, String pw, String url) {
 		super();
 		this.user = user;
@@ -41,20 +41,14 @@ public class SQLOracleConnector implements SQLConnector {
 	}
 
 	@Override
-	public Connection getConnection() {
+	public Connection getConnection() throws SQLException, ClassNotFoundException {
 		Connection conn = null;
-		try {			
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-						
-			conn = DriverManager.getConnection(url, user, pw);
-			System.out.println("연결성공");
-		} catch (ClassNotFoundException e) {
-			System.out.println("클래스 로드 실패");
-			e.printStackTrace();
-		} catch (SQLException e) {
-			System.out.println("커넥션 실패");
-			e.printStackTrace();
-		}
+
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+
+		conn = DriverManager.getConnection(url, user, pw);
+		
+
 		return conn;
 	}
 

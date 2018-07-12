@@ -1,7 +1,5 @@
 package basic;
 
-import java.sql.Connection;
-
 public class SQLMain {
 
 	public static void main(String[] args) {
@@ -10,7 +8,12 @@ public class SQLMain {
 		String pw = "tiger";
 		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
 		
-		Connection conn = new SQLConnectionExcutor(new SQLOracleConnector(user, pw, url)).getConnection();
+//		try {
+//			Connection conn = new SQLConnectionExcutor(new SQLOracleConnector(user, pw, url)).getConnection();
+//		} catch (ClassNotFoundException | SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 	}
 
