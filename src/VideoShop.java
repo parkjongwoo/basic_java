@@ -23,7 +23,7 @@ public class VideoShop extends JFrame
 			pane.addTab("비디오관리", video);
 			pane.addTab("대여관리", rent );
 
-			pane.setSelectedIndex(0);
+			pane.setSelectedIndex(1);
 
 			// 화면크기지정
 			add("Center", pane );

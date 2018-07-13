@@ -14,10 +14,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import sun.net.www.http.HttpClient;
 
 public class JavaWebCrawler {
 

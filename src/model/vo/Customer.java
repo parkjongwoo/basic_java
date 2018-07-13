@@ -50,6 +50,6 @@ public class Customer {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return custTel1;
+		return custTel1+custName;
 	}
 }

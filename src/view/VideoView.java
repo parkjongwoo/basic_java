@@ -1,12 +1,28 @@
 package	 view;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.table.AbstractTableModel; 
-import javax.swing.text.TabExpander;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.AbstractTableModel;
+
+import model.VideoModel;
+import model.vo.Genre;
+import model.vo.Video;
 
 
 public class VideoView extends JPanel 
@@ -27,25 +43,111 @@ public class VideoView extends JPanel
 	
 	VideoTableModel tbModelVideo;
 	
+	VideoModel db;
 	
-
 	//##############################################
 	//	constructor method
 	public VideoView(){
-		//addLayout(); 	// 화면설계
-		//eventProc();
-		//connectDB();	// DB연결
+		connectDB();	// DB연결
+		addLayout(); 	// 화면설계
+		initStyle();
+		eventProc();
+		loadgenre();
 	}
 	
+	private void initStyle() {
+		tfVideoNum.setEditable(false);
+		tfInsertCount.setEditable(false);
+	}
 	public void connectDB(){	// DB연결
+		try {
+			db = new VideoModel();
+			System.out.println("비디오디비 연결");
+		} catch (Exception e) {
+			System.out.println("비디오디비 연결 실패");
+			e.printStackTrace();
+		}
+	}
+	private void loadgenre() {
+		// TODO Auto-generated method stub
 		
 	}
-	
 	public void eventProc(){
-		
+		EventHandlr h = new EventHandlr();
+		cbMultiInsert.addActionListener(h);
+		bVideoInsert.addActionListener(h);
+		bVideoModify.addActionListener(h);
+		bVideoDelete.addActionListener(h);
+		tfVideoSearch.addActionListener(h);
 	}		
 	
+	private class EventHandlr implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Object o = e.getSource();
+//			String result = null;
+			if(o == cbMultiInsert) {//다중입고
+				tfInsertCount.setEditable(cbMultiInsert.isSelected());
+			}else if(o == bVideoInsert) {//비디오입고
+				resistVideo();
+			}else if(o == bVideoModify) {//비디오수정
+				updateVideo();
+			}else if(o == bVideoDelete) {//비디오삭제
+				deleteVideo();
+			}else if(o == tfVideoSearch) {//비디오검색
+				searchVideo();
+			}
+//			System.out.println(result);
+		}			
+	}
+	
+	private void searchVideo() {
+		ArrayList<ArrayList<String>> model = null;
+		try {
+			switch(comVideoSearch.getSelectedIndex()) {
+			case 0:
+				model = db.searchVideoByTitle(tfVideoSearch.getText());
+				break;
+			case 1:
+				model = db.searchVideoByDirector(tfVideoSearch.getText());
+				break;
+			}
+		} catch (Exception e) {
+			System.out.println("비디오 검색 실패");
+			e.printStackTrace();
+		}	
+		tbModelVideo.data = model;
+		tbModelVideo.fireTableDataChanged();
+		JOptionPane.showMessageDialog(this, model.size()+"개의 비디오가 검색되었습니다.");
+	}
 
+	private void deleteVideo() {
+		db.deleteVideo();
+	}
+
+	private void updateVideo() {
+		db.updateVideo();
+	}
+
+	private void resistVideo() {
+//		 tfVideoTitle, tfVideoDirector, tfVideoActor
+		int resistCnt = cbMultiInsert.isSelected()?
+				Integer.valueOf(tfInsertCount.getText()):1;
+		Video dao = new Video();
+		dao.setGenre(((Genre)comVideoJanre.getSelectedItem()).getGenid());
+		dao.setVideoName(tfVideoTitle.getText());
+		dao.setDirector(tfVideoDirector.getText());
+		dao.setActor(tfVideoActor.getText());
+		dao.setExp(taVideoContent.getText());
+		
+		try {
+			db.insertVideo(dao, resistCnt);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("비디오등록 실패"+e.getMessage());
+		}
+	}
+	
 	//  화면설계 메소드
 	public void addLayout(){
 		//멤버변수의 객체 생성
@@ -54,10 +156,18 @@ public class VideoView extends JPanel
 		tfVideoDirector = new JTextField();
 		tfVideoActor = new JTextField();
 		
-		String []cbJanreStr = {"멜로","엑션","스릴","코미디"};
-		comVideoJanre = new JComboBox(cbJanreStr);
-		taVideoContent = new JTextArea();
+//		String []cbJanreStr = db.loadgenre();
 		
+		//장르 로딩
+//		try {
+//			db.loadgenre();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.out.println("장르 로딩 실패");
+//		}
+		
+		comVideoJanre = new JComboBox(db.genreList.toArray());
+		taVideoContent = new JTextArea();
 		cbMultiInsert = new JCheckBox("다중입고");
 		tfInsertCount = new JTextField("1",5);
 	
