@@ -1,7 +1,6 @@
 package model;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -14,14 +13,7 @@ public class CustomerModel {
 	
 	public CustomerModel() throws Exception{
 		
-		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-		String user = "scott";
-		String password = "tiger";
-		// 1. 드라이버로딩
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		// 2. Connection 연결객체 얻어오기
-		
-		con = DriverManager.getConnection(url, user, password);
+		con = DBConn.getConnection();
 	}
 	
 	public int insertCustomer(Customer dao) throws Exception{
