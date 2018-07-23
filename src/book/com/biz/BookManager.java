@@ -22,6 +22,7 @@ public class BookManager {
 
 	public void start() {
 		int inputValue = 0;
+		dao.selectAll();
 		do {
 			do {
 				printMenuAndMessage(Menu.MENU01,Message.MESSAGE09);

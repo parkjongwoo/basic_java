@@ -15,7 +15,7 @@ public class Book
 	}
 	
 	public Book(int no, String name, String author, String publisher) {
-
+		seq = seq<=no?no+1:seq;
 		this.no = no;
 		this.name = name;
 		this.author = author;
