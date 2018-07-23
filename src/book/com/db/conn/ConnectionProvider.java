@@ -1,4 +1,4 @@
-﻿package com.db.conn;
+﻿package book.com.db.conn;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,7 +20,7 @@ public class ConnectionProvider {
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 
 		con=DriverManager.getConnection(
-				"jdbc:oracle:thin:@localhost:1521:XE", 
+				"jdbc:oracle:thin:@localhost:1521:orcl", 
 				"scott", 
 				"tiger");
 		    

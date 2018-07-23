@@ -1,8 +1,8 @@
-﻿package com.view;
+﻿package book.com.view;
 
 import java.util.ArrayList;
 
-import com.dto.Book;
+import book.com.dto.Book;
 
 public class FormatWriter {
 

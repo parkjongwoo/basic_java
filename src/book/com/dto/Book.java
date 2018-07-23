@@ -1,4 +1,4 @@
-﻿package com.dto;
+﻿package book.com.dto;
 public class Book
 {
 	//일체 손대지 마시오.

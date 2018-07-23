@@ -1,4 +1,4 @@
-﻿package com.view;
+﻿package book.com.view;
 //메세지 출력모음 클래스
 public class Message
 {

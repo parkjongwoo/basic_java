@@ -1,4 +1,4 @@
-﻿package com.biz;
+﻿package book.com.biz;
 
 //시작 클래스
 public class BookManagementSystemTest 

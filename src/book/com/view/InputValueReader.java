@@ -1,10 +1,10 @@
-﻿package com.view;
+﻿package book.com.view;
 //도스창에서 입력값을 읽는 클래스
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import com.dto.Book;
+import book.com.dto.Book;
 
 public class InputValueReader
 {
