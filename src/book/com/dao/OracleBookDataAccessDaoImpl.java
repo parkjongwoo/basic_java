@@ -33,8 +33,8 @@ public class OracleBookDataAccessDaoImpl implements BookDataAccessDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			JdbcUtil.close(conn);
 			JdbcUtil.close(ps);
+			JdbcUtil.close(conn);
 		}
 		return result;
 	}
@@ -56,9 +56,9 @@ public class OracleBookDataAccessDaoImpl implements BookDataAccessDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			JdbcUtil.close(conn);
 			JdbcUtil.close(ps);
 			JdbcUtil.close(rs);
+			JdbcUtil.close(conn);
 		}
 		return list;
 	}
@@ -80,9 +80,9 @@ public class OracleBookDataAccessDaoImpl implements BookDataAccessDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			JdbcUtil.close(conn);
 			JdbcUtil.close(ps);
 			JdbcUtil.close(rs);
+			JdbcUtil.close(conn);
 		}
 		return book;
 	}
@@ -107,8 +107,8 @@ public class OracleBookDataAccessDaoImpl implements BookDataAccessDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			JdbcUtil.close(conn);
 			JdbcUtil.close(ps);
+			JdbcUtil.close(conn);
 		}
 		return result;
 	}
@@ -127,8 +127,8 @@ public class OracleBookDataAccessDaoImpl implements BookDataAccessDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			JdbcUtil.close(conn);
 			JdbcUtil.close(ps);
+			JdbcUtil.close(conn);
 		}
 		return result;
 	}
@@ -150,9 +150,9 @@ public class OracleBookDataAccessDaoImpl implements BookDataAccessDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			JdbcUtil.close(conn);
 			JdbcUtil.close(ps);
 			JdbcUtil.close(rs);
+			JdbcUtil.close(conn);
 		}
 		return list;
 	}
